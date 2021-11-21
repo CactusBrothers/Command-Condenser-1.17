@@ -1,0 +1,47 @@
+<head>
+</head>
+
+<body>
+
+<div style="position: fixed;bottom: 10px;width: 95%;background-color: red;border: 3px solid darkred;">Command:
+ <p id="finalcommand"></p>
+ <button type="button" onclick="copycommand()">Copy to clipboard</button> 
+</div>
+
+<form>
+	<label for="input"><strong>Input: </strong></label>
+	<input type="text" id="input" name="input"><br><br>
+</form>
+
+<button type="button" onclick="SubmitCommand()">Add command</button>
+<p>Commands inserted:</p>
+<p id="test"></p>
+
+<br>
+<br>
+
+<script>
+	const commands = []
+	let output = ""
+	let finalcommand = ""
+	function SubmitCommand() {
+		let Command = document.getElementById("input").value
+		commands.push(Command)
+		let commandsLength = commands.length
+		output = "<ol>"
+		finalcommand = "/summon falling_block ~ ~1 ~ {Time:1,BlockState:{Name:redstone_block},Passengers:[{id:armor_stand,Health:0,Passengers:[{id:falling_block,Time:1,BlockState:{Name:activator_rail},Passengers:[{id:command_block_minecart,Command:'data merge block ~ ~-2 ~ {auto:0}'},"
+		
+		for (let i = 0; i < commandsLength; i++) {
+			output += "<li>" + commands[i] + "</li>"
+			finalcommand += "{id:command_block_minecart,Command:'" + commands[i] + "'},"
+		}
+		output += "</ol>"
+		document.getElementById("test").innerHTML = output
+		finalcommand += "{id:command_block_minecart,Command:'setblock ~ ~1 ~ command_block{auto:1,Command:\"fill ~ ~ ~ ~ ~-2 ~ air\"}'},{id:command_block_minecart,Command:'kill @e[type=command_block_minecart,distance=..1]'}]}]}]}"
+		document.getElementById("finalcommand").innerHTML = finalcommand
+	}
+	
+	function copycommand() {
+		navigator.clipboard.writeText(finalcommand)
+	}
+</script>
